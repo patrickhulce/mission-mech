@@ -1,6 +1,6 @@
 {
   "out": "docs",
-  "name": "mission-mech",
+  "name": "autobots-assemble",
   "exclude": ["**/*.test.ts"],
   "excludeExternals": true,
   "excludePrivate": true,

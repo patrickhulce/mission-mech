@@ -1,5 +1,5 @@
 {
-  "name": "mission-mech",
+  "name": "autobots-assemble",
   "private": false,
   "version": "0.0.0",
   "description": "A library to build mechanized assistants to accomplish vague missions using LLMs.",

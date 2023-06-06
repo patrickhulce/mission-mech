@@ -1,3 +1,3 @@
-# Mission Mech
+# Autobots Assemble
 
-A JavaScript library to build mechanized assistants to accomplish vague missions using LLMs.
+A JavaScript library to build automated assistants to accomplish vague objectives using LLMs.
