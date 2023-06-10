@@ -1,5 +1,5 @@
 {
-  "name": "autobots-assemble",
+  "name": "autobots-ai",
   "private": false,
   "version": "0.0.0",
   "description": "A library to build mechanized assistants to accomplish vague missions using LLMs.",
@@ -24,7 +24,10 @@
     "release": "semantic-release"
   },
   "keywords": [
-    ""
+    "autobots",
+    "ai",
+    "langchain",
+    "gpt"
   ],
   "author": "Patrick Hulce <patrick.hulce@gmail.com>",
   "license": "MIT",
