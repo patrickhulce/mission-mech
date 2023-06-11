@@ -137,3 +137,18 @@ Chain -> Machine
 Tool -> Machine+Manual
 Agent -> Strategy
 Agent Executor -> Autobot
+
+## TODO
+
+- Everything ;)
+- Convert into turborepo (core, machines, sdk)
+- work through API example with podcast, conversion to text, indexing, and performing q&a
+- add base types for machines / cogs
+- add base implmenetations
+  - machines / templates / prompts / cogs
+  - manuals
+  - models
+  - memory
+  - strategy
+  - brain
+  - autobot
