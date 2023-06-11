@@ -1,6 +1,88 @@
 # Autobots AI
 
-A JavaScript library to build automated assistants to accomplish vague objectives using LLMs. Comparable to LangChain but with a Transformers™-inspired naming spin (not actually affiliated with Hasbro, Toei Animation, or Transformers in any way).
+A collection of JavaScript libraries to build automated assistants to accomplish vague objectives using LLMs. Comparable to LangChain but with no ecosystem, an explicit focus on autonomous agents, and a Transformers™-inspired naming spin (not actually affiliated with Hasbro, Toei Animation, or Transformers in any way).
+
+## API
+
+### Simple Machines
+
+```js
+// The most basic machine is a passthrough of the prompt.
+import {PromptMachine} from '@autobots-ai/core';
+
+const model = new OpenAIChatCompletionModel({model: 'gpt-3.5-turbo'});
+const machine = new PromptMachine({model});
+const {output} = await machine.run(`What does AGI stand for?`);
+expect(output).toContain('Artificial General Intelligence');
+
+// You can also link machines together in complex ways.
+import {PromptMachine, FanoutMachine, SequenceMachine} from '@autobots-ai/core';
+import {WordpressMachine} from '@autobots-ai/wordpress';
+
+// Come up with many ideas.
+const ideaMachine = new PromptMachine({
+  model,
+  template: ({topic}) => `Come up with 10 blog post ideas for ${topic} separated by newlines`,
+  parser: (output) => output.split('\n'),
+});
+// Write a post for a given idea.
+const writerMachine = new PromptMachine({
+  model,
+  template: ({topic}) => `Write a detailed blog post about ${topic}`,
+  parser: (output, {topic}) => ({title: topic, body: output}),
+});
+// Combine the two to write a post for each idea.
+const postMachine = new FanoutMachine({model, source: ideaMachine, destination: writerMachine});
+// Publish a give post to WordPress.
+const publisherMachine = new WordpressPostMachine({
+  origin: 'https://www.myblog.com',
+  username: process.env.WORDPRESS_USER,
+  password: process.env.WORDPRESS_PASS,
+  transform: ({title, body}) => ({title, body, author: 'Mr. Auto I. Bot', status: 'draft'}),
+});
+// Put it all together, to come up with ideas, write them, then post them.
+const bloggingMachine = new SequenceMachine({model, machines: [postMachine, publisherMachine]});
+```
+
+### Autobots Assemble!
+
+```js
+import {assemble} from '@autobots-ai/core';
+import {BrowserMachine, FilesystemMachine} from '@autobots-ai/machines';
+
+// Autobots Assemble!
+const downloaderBot = assemble()
+  // Supports browsing the internet.
+  .machine((context) => new BrowserMachine(context))
+  // Supports reading and writing to the filesystem.
+  .machine(
+    (context) => new FilesystemMachine({...context, scope: `${process.env.HOME}/Autobots/Sandbox`})
+  );
+
+const mission = await downloaderBot.mobilize(`
+  Find the best 10 recent articles from diverse, high-quality sources about AGI and save them
+  in markdown to ~/Autobots/Sandbox/agi-articles in the format described in """ below.
+
+  """
+  Title: TITLE_GOES_HERE
+  Link: LINK_GOES_HERE
+  Publisher: PUBLISHER_NAME_GOES_HERE
+  Author: AUTHORS_NAME_GOES_HERE
+  ---
+
+  ARTICLE_BODY_GOES_HERE
+  """
+`);
+
+mission.on('step', (event) => console.log(event.input, event.output, event.machine));
+mission.on('progress', (event) => console.log(event.milestone));
+
+const plan = await mission.plan();
+await mission.completion({milestone: plan.milestones[1]});
+console.log('Achieved 2nd Milestone!');
+await mission.completion();
+console.log('Done!');
+```
 
 ## Concepts
 
