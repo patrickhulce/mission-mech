@@ -93,7 +93,7 @@ console.log('Done!');
   - Brain: a system capable of using machines in pursuit of an objective, typically using a model, collection of memories, and a strategy.
     - Model: a construct (usually a large language model) that can make predictions based on prompts.
     - Memory: a construct that retains knowledge from past prompts and their corresponding outputs.
-    - Strategy: a collection of templates that are used by a brain in concert with a model and memories.
+    - Strategy: a specific class of machine that accepts an objective and produces a plan with an algorithm (series of templates) for reducing / solving the objective.
     - Template: a function with well-defined inputs that, when provided, produces a prompt.
     - Prompt: a natural language string of instructions that can be used as input to a model.
     - Objective: a natural language description of a desired state to pursue.
