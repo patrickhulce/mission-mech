@@ -7,6 +7,8 @@ export interface Machine<TInput, TOutput> {
   run(input: TInput): Promise<TOutput>;
 }
 
+export type MachineWithManual<TInput, TOutput> = Machine<TInput, TOutput> & Manual;
+
 export interface Manual {
   descriptions: {
     /**
@@ -22,9 +24,10 @@ export interface Manual {
      * Type definition: string
      * Format: Any sentence, paragraph, or article of text in natural language.
      * Semantics: The written content from which the names of famous people should be extracted.
+     * JSON-serialized Example: "Brad Pitt and Matt Damon starred in Ocean's Eleven."
      * "
      */
-    input: {typedef: string; format: string; semantics: string};
+    input: {typedef: string; format: string; semantics: string; example?: string};
     /**
      * A detailed description of the machine's output type definition, format, and semantics.
      * The grammar of this description should follow the example below.
@@ -32,9 +35,10 @@ export interface Manual {
      * Type definition: string[]
      * Format: One name for each string in the array.
      * Semantics: The first and last names of the famous people that were extracted.
+     * JSON-serialized Example: [ "Brad Pitt", "Matt Damon" ]
      * "
      */
-    output: {typedef: string; format: string; semantics: string};
+    output: {typedef: string; format: string; semantics: string; example?: string};
   };
 }
 
