@@ -6,16 +6,22 @@ A collection of JavaScript libraries to build automated assistants to accomplish
 
 ### Simple Machines
 
+The most basic machine is a passthrough of the prompt.
+
 ```js
-// The most basic machine is a passthrough of the prompt.
 import {PromptMachine} from '@autobots-ai/core';
 
 const model = new OpenAIChatCompletionModel({model: 'gpt-3.5-turbo'});
 const machine = new PromptMachine({model});
 const {output} = await machine.run(`What does AGI stand for?`);
 expect(output).toContain('Artificial General Intelligence');
+```
 
-// You can also link machines together in complex ways.
+### Complex Machines
+
+We can also link machines together in more complex ways.
+
+```js
 import {PromptMachine, FanoutMachine, SequenceMachine} from '@autobots-ai/core';
 import {WordpressMachine} from '@autobots-ai/wordpress';
 
@@ -25,23 +31,56 @@ const ideaMachine = new PromptMachine({
   template: ({topic}) => `Come up with 10 blog post ideas for ${topic} separated by newlines`,
   parser: (output) => output.split('\n'),
 });
+
 // Write a post for a given idea.
 const writerMachine = new PromptMachine({
   model,
   template: ({topic}) => `Write a detailed blog post about ${topic}`,
   parser: (output, {topic}) => ({title: topic, body: output}),
 });
+
 // Combine the two to write a post for each idea.
 const postMachine = new FanoutMachine({model, source: ideaMachine, destination: writerMachine});
-// Publish a give post to WordPress.
+
+// Publish a given post to WordPress.
 const publisherMachine = new WordpressPostMachine({
   origin: 'https://www.myblog.com',
   username: process.env.WORDPRESS_USER,
   password: process.env.WORDPRESS_PASS,
   transform: ({title, body}) => ({title, body, author: 'Mr. Auto I. Bot', status: 'draft'}),
 });
-// Put it all together, to come up with ideas, write them, then post them.
+
+// Put it all together. Come up with ideas, write them, and then post them.
 const bloggingMachine = new SequenceMachine({model, machines: [postMachine, publisherMachine]});
+
+await bloggingMachine.run({topic: 'Transformers'});
+```
+
+### Recursive Machines
+
+We can even put machines on a basic manual loop.
+
+```js
+const model = new OpenAIChatCompletionModel({model: 'gpt-3.5-turbo'});
+
+// Write a paragraph with given outline.
+const paragraphMachine = new PromptMachine({
+  model,
+  template: ({outline}) => `Write a paragraph using the following outline:\n"""${outline}"""`,
+  parser: (output) => output,
+});
+
+// Expand an idea
+const outlineMachine = new PromptMachine({
+  model,
+  template: ({breadcrumbs}) =>
+    [
+      `You are writing a paragraph of an article about "${breadcrumbs[0]}."`,
+      `Expand the following idea into an outline for the paragraph:\n"""${
+        breadcrumbs.slice(-1)[0]
+      }"""`,
+    ].join('\n'),
+});
 ```
 
 ### Autobots Assemble!
