@@ -1,6 +1,7 @@
 export const COMMON_FORMATS = {
   NATURAL_LANGUAGE: 'Any sentence, paragraph, or article of text in natural language.',
-  CSV: 'A comma-separated list of values with each value enclosed in quotation marks.',
+  JSON: 'A JSON-serialized representation of the value.',
+  CSV: 'A comma-separated list of values with each value enclosed in double quotes ("").',
 };
 
 export interface Machine<TInput, TOutput> {
@@ -24,7 +25,7 @@ export interface Manual {
      * Type definition: string
      * Format: Any sentence, paragraph, or article of text in natural language.
      * Semantics: The written content from which the names of famous people should be extracted.
-     * JSON-serialized Example: "Brad Pitt and Matt Damon starred in Ocean's Eleven."
+     * Example: ```Brad Pitt and Matt Damon starred in Ocean's Eleven.```
      * "
      */
     input: {typedef: string; format: string; semantics: string; example?: string};
@@ -33,9 +34,9 @@ export interface Manual {
      * The grammar of this description should follow the example below.
      * * @example "
      * Type definition: string[]
-     * Format: One name for each string in the array.
+     * Format: A JSON-serialized representation of the value.
      * Semantics: The first and last names of the famous people that were extracted.
-     * JSON-serialized Example: [ "Brad Pitt", "Matt Damon" ]
+     * Example: ```[ "Brad Pitt", "Matt Damon" ]```
      * "
      */
     output: {typedef: string; format: string; semantics: string; example?: string};
@@ -52,11 +53,11 @@ export interface Model {
   predict(
     input: string
   ): Promise<{output: string; cost: {inputTokens: string; outputTokens: string}}>;
-  getCostInDollars(cost: {inputTokens: string; outputTokens: string}): number;
+  getCostInDollars(cost: {inputTokens: number; outputTokens: number}): number;
 }
 
 export interface Memory {
-  getPurposeDescription(): string;
+  getPurpose(): string;
   getSummaryOfContents(): string;
   search(query: string): Promise<string>;
 }

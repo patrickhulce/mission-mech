@@ -56,33 +56,6 @@ const bloggingMachine = new SequenceMachine({model, machines: [postMachine, publ
 await bloggingMachine.run({topic: 'Transformers'});
 ```
 
-### Recursive Machines
-
-We can even put machines on a basic manual loop.
-
-```js
-const model = new OpenAIChatCompletionModel({model: 'gpt-3.5-turbo'});
-
-// Write a paragraph with given outline.
-const paragraphMachine = new PromptMachine({
-  model,
-  template: ({outline}) => `Write a paragraph using the following outline:\n"""${outline}"""`,
-  parser: (output) => output,
-});
-
-// Expand an idea
-const outlineMachine = new PromptMachine({
-  model,
-  template: ({breadcrumbs}) =>
-    [
-      `You are writing a paragraph of an article about "${breadcrumbs[0]}."`,
-      `Expand the following idea into an outline for the paragraph:\n"""${
-        breadcrumbs.slice(-1)[0]
-      }"""`,
-    ].join('\n'),
-});
-```
-
 ### Autobots Assemble!
 
 ```js
