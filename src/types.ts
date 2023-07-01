@@ -6,41 +6,56 @@ export const COMMON_FORMATS = {
 
 export interface Machine<TInput, TOutput> {
   run(input: TInput): Promise<TOutput>;
+  manual?: Manual;
 }
 
-export type MachineWithManual<TInput, TOutput> = Machine<TInput, TOutput> & Manual;
+export interface FormatDescription {
+  /** A description of the type of content expected. */
+  format: string;
+  /** A typescript definition of the type definition of the content once parsed. */
+  typedef: string;
+  /** The meaning of the content in the context of the task. */
+  semantics: string;
+  /** A specific stringified example of this format. */
+  example: string;
+}
 
 export interface Manual {
-  descriptions: {
-    /**
-     * A high-level description of the machine's capabilities / purpose.
-     * The grammar of this description should complete the sentence "A machine that..."
-     * @example "Capitalizes the first letter of each word in a string."
-     */
-    summary: string;
-    /**
-     * A detailed description of the machine's input type definition, format, and semantics.
-     * * The grammar of this description should follow the example below.
-     * @example "
-     * Type definition: string
-     * Format: Any sentence, paragraph, or article of text in natural language.
-     * Semantics: The written content from which the names of famous people should be extracted.
-     * Example: ```Brad Pitt and Matt Damon starred in Ocean's Eleven.```
-     * "
-     */
-    input: {typedef: string; format: string; semantics: string; example?: string};
-    /**
-     * A detailed description of the machine's output type definition, format, and semantics.
-     * The grammar of this description should follow the example below.
-     * * @example "
-     * Type definition: string[]
-     * Format: A JSON-serialized representation of the value.
-     * Semantics: The first and last names of the famous people that were extracted.
-     * Example: ```[ "Brad Pitt", "Matt Damon" ]```
-     * "
-     */
-    output: {typedef: string; format: string; semantics: string; example?: string};
-  };
+  /**
+   * A high-level description of the machine's capabilities / purpose.
+   * The grammar of this description should complete the sentence "A machine that..."
+   * @example "Extracts a list of famous people's names from a piece of text."
+   */
+  summary: string;
+  /**
+   * A detailed description of the machine's capabilities / purpose written as an instruction.
+   * The grammar of this description should constitue a command in the 2nd person.
+   * It should contain the phrase "in the following input format."
+   * @example "Extract the first and last name of each well known person referenced in the following input format."
+   */
+  instruction: string;
+  /**
+   * A detailed description of the machine's input type definition, format, and semantics.
+   * The grammar of this description should follow the example below.
+   * @example "
+   * Type definition: string
+   * Format: Any sentence, paragraph, or article of text in natural language.
+   * Semantics: The written content from which the names of famous people should be extracted.
+   * Example: ```Brad Pitt and Matt Damon starred in Ocean's Eleven.```
+   * "
+   */
+  input: FormatDescription;
+  /**
+   * A detailed description of the machine's output type definition, format, and semantics.
+   * The grammar of this description should follow the example below.
+   * @example "
+   * Type definition: string[]
+   * Format: A JSON-serialized representation of the value.
+   * Semantics: The first and last names of the famous people that were extracted.
+   * Example: ```[ "Brad Pitt", "Matt Damon" ]```
+   * "
+   */
+  output: FormatDescription;
 }
 
 export interface Brain {
