@@ -45,13 +45,13 @@ export function fromManual<TInput, TOutput>(
 
       ${manual.instruction}
 
-      The input will be ${manual.input.semantics} \\
-      formatted as ${manual.input.format} \\
-      contained in """ below \\
+      The input will be ${manual.input.semantics}, \\
+      formatted as ${manual.input.format}, \\
+      contained in """ below, \\
       and match a type definition of \`${manual.input.typedef}\`.
 
-      The output should be ${manual.output.semantics} \\
-      formatted as ${manual.output.format} \\
+      The output should be ${manual.output.semantics}, \\
+      formatted as ${manual.output.format}, \\
       and match a type definition of \`${manual.output.typedef}\`.
 
       Input: """${JSON.stringify(input)}"""

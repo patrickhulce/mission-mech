@@ -1,7 +1,7 @@
 export const COMMON_FORMATS = {
-  NATURAL_LANGUAGE: 'Any sentence, paragraph, or article of text in natural language.',
-  JSON: 'A JSON-serialized representation of the value.',
-  CSV: 'A comma-separated list of values with each value enclosed in double quotes ("").',
+  NATURAL_LANGUAGE: 'any sentence, paragraph, or article of text in natural language',
+  JSON: 'a JSON-serialized representation of the value',
+  CSV: 'a comma-separated list of values with each value enclosed in double quotes ("")',
 };
 
 export interface Machine<TInput, TOutput> {
@@ -36,22 +36,22 @@ export interface Manual {
   instruction: string;
   /**
    * A detailed description of the machine's input type definition, format, and semantics.
-   * The grammar of this description should follow the example below.
+   * The grammar of this description should be a fragment of a sentence without punctuation.
    * @example "
    * Type definition: string
-   * Format: Any sentence, paragraph, or article of text in natural language.
-   * Semantics: The written content from which the names of famous people should be extracted.
+   * Format: any sentence, paragraph, or article of text in natural language
+   * Semantics: the written content from which the names of famous people should be extracted
    * Example: ```Brad Pitt and Matt Damon starred in Ocean's Eleven.```
    * "
    */
   input: FormatDescription;
   /**
    * A detailed description of the machine's output type definition, format, and semantics.
-   * The grammar of this description should follow the example below.
+   * The grammar of this description should be a fragment of a sentence without punctuation.
    * @example "
    * Type definition: string[]
-   * Format: A JSON-serialized representation of the value.
-   * Semantics: The first and last names of the famous people that were extracted.
+   * Format: a JSON-serialized representation of the value.
+   * Semantics: the first and last names of the famous people that were extracted
    * Example: ```[ "Brad Pitt", "Matt Damon" ]```
    * "
    */
@@ -68,7 +68,6 @@ export interface Model {
   predict(
     input: string
   ): Promise<{output: string; cost: {inputTokens: string; outputTokens: string}}>;
-  getCostInDollars(cost: {inputTokens: number; outputTokens: number}): number;
 }
 
 export interface Memory {

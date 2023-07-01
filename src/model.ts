@@ -13,10 +13,6 @@ export class OpenAIChatCompletionModel implements Model {
   ): Promise<{output: string; cost: {inputTokens: string; outputTokens: string}}> {
     throw new Error('Method not implemented.');
   }
-
-  public getCostInDollars(cost: {inputTokens: number; outputTokens: number}): number {
-    return (cost.inputTokens + cost.outputTokens) * 0.0001;
-  }
 }
 
 export const GPT_3_5_TURBO = new OpenAIChatCompletionModel({
