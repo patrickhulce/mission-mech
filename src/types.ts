@@ -78,10 +78,6 @@ export interface Memory {
 
 export type Strategy = Machine<{objective: string; milestones?: string}, {plan: Plan}>;
 
-export interface Template<TInput> {
-  resolveToPrompt(input: TInput): string;
-}
-
 export interface Autobot {
   mobilize(objective: string, options?: MissionOptions): Promise<Mission>;
 }
