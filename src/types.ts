@@ -9,6 +9,8 @@ export interface Machine<TInput, TOutput> {
   manual?: Manual;
 }
 
+export type DocumentedMachine<TInput, TOutput> = Required<Machine<TInput, TOutput>>;
+
 export interface FormatDescription {
   /** A description of the type of content expected. */
   format: string;
@@ -76,7 +78,24 @@ export interface Memory {
   search(query: string): Promise<string>;
 }
 
-export type Strategy = Machine<{objective: string; milestones?: string}, {plan: Plan}>;
+export interface StrategyState {
+  // What's available to utilize.
+  model: Model;
+  memory: Memory[];
+  tools: DocumentedMachine<unknown, unknown>[];
+
+  // Context and history.
+  stepsTaken: StepState[];
+  plan: Plan;
+
+  // Current goals and task information.
+  currentMilestone: Milestone;
+}
+
+export interface Strategy {
+  createPlan(data: {objective: string; milestones?: string[]}): Promise<Plan>;
+  getNextStep(current: StrategyState): StepInput;
+}
 
 export interface Autobot {
   mobilize(objective: string, options?: MissionOptions): Promise<Mission>;
@@ -84,14 +103,15 @@ export interface Autobot {
 
 export interface MissionOptions {
   budgetInDollars?: number;
-  milestones?: string | Milestone[];
+  milestones?: string[] | Milestone[];
 }
 
 export interface Mission {
-  plan(): Promise<Plan>;
-  completion(): Promise<void>;
+  embark(): Promise<void>;
 
-  on(event: 'step', listener: (step: MissionStep) => void): void;
+  on(event: 'plan', listener: (plan: Plan) => void): void;
+  on(event: 'step', listener: (step: StepState) => void): void;
+  on(event: 'complete', listener: () => void): void;
 }
 
 enum Status {
@@ -101,22 +121,23 @@ enum Status {
   Failed = 'failed',
 }
 
-export interface MissionStep_ {
-  input: unknown;
-  machine: Machine<unknown, unknown>;
+export interface StepInput<TInput = unknown, TOutput = unknown> {
+  input: TInput;
+  machine: Machine<TInput, TOutput>;
 }
 
-type MissionStep =
-  | ({status: Exclude<Status, Status.Complete>} & MissionStep_)
-  | ({status: Status.Complete; output: unknown} & MissionStep_);
+export type StepState<TInput = unknown, TOutput = unknown> =
+  | ({status: Exclude<Status, Status.Complete | Status.Failed>} & StepInput<TInput, TOutput>)
+  | ({status: Status.Failed; error: Error} & StepInput<TInput, TOutput>)
+  | ({status: Status.Complete; output: TOutput} & StepInput<TInput, TOutput>);
 
 export interface Plan {
   milestones: Milestone[];
-  getNextStep(): Promise<MissionStep>;
 }
 
 export interface Milestone {
   id: string;
   name: string;
   objective: string;
+  milestones: Milestone[];
 }
