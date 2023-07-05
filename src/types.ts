@@ -79,16 +79,16 @@ export interface Memory {
 }
 
 export interface StrategyState {
-  // What's available to utilize.
+  // What's available for the strategy to utilize.
   model: Model;
   memory: Memory[];
   tools: DocumentedMachine<unknown, unknown>[];
 
-  // Context and history.
+  // Context and history for manual inspection.
   stepsTaken: StepState[];
   plan: Plan;
 
-  // Current goals and task information.
+  // Goals and task information that the strategy is currently executing against.
   currentMilestone: Milestone;
 }
 
@@ -107,7 +107,10 @@ export interface MissionOptions {
 }
 
 export interface Mission {
-  embark(): Promise<void>;
+  /** Starts the autobot's planning of the mission. */
+  plan(): Promise<Plan>;
+  /** Starts the autobot's execution of the mission. */
+  execute(): Promise<void>;
 
   on(event: 'plan', listener: (plan: Plan) => void): void;
   on(event: 'step', listener: (step: StepState) => void): void;
