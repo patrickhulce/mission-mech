@@ -5,7 +5,9 @@ export const COMMON_FORMATS = {
 };
 
 export interface Machine<TInput, TOutput> {
+  /** Runs the machine on the input to produce the output. */
   run(input: TInput): Promise<TOutput>;
+  /** A description of the machine's inputs, outputs, and functionality. */
   manual?: Manual;
 }
 
@@ -125,8 +127,10 @@ enum Status {
 }
 
 export interface StepInput<TInput = unknown, TOutput = unknown> {
-  input: TInput;
+  /** The machine used for this step. */
   machine: Machine<TInput, TOutput>;
+  /** The input provided to the machine for this step. */
+  input: TInput;
 }
 
 export type StepState<TInput = unknown, TOutput = unknown> =
