@@ -75,9 +75,16 @@ export interface Model {
 }
 
 export interface Memory {
+  /** Returns a brief description of the _type_ of data that memory is meant to store, not its actual contents. */
   getPurpose(): string;
+  /** Summarizes the actual contents of the memory at a high level. */
   getSummaryOfContents(): string;
+  /** Returns information related to the query that's contained in memory. */
   search(query: string): Promise<string>;
+
+  // The way memory is added / indexed varies greatly between memory types.
+  // Entity memory -> entity key + information about the entity.
+  // History/context memory -> a list of events + compaction strategy.
 }
 
 export interface StrategyState {
