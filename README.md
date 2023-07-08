@@ -2,6 +2,12 @@
 
 A collection of JavaScript libraries to build automated assistants to accomplish vague objectives using LLMs. Comparable to LangChain but with no ecosystem, an explicit focus on autonomous agents, and a Transformers™-inspired naming spin (not actually affiliated with Hasbro, Toei Animation, or Transformers in any way).
 
+## WTF did you build this?
+
+Fun! LLMs are a relatively novel base building block of programming without dominant abstractions I thought it would be neat to explore. I also found the naming of "chain" in LangChain to irk me ever so slightly (when it's just a single INPUT->OUTPUT you haven't chained anything yet!), so I thought I'd have fun with it in a new way (I'm a sucker for themed libs).
+
+You should almost definitely use LangChain instead of this though. What makes LangChain great is the enormous community of plugins, python as a dominant language for ML in general, and the plethora of eager-to-help expertise around it.
+
 ## API
 
 ### Simple Machines
