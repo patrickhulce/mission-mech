@@ -54,9 +54,15 @@ export function fromManual<TInput, TOutput>(
       formatted as ${manual.output.format}, \\
       and match a type definition of \`${manual.output.typedef}\`.
 
-      Input: """${JSON.stringify(input)}"""
+      Example:
+      Input="""${manual.input.example}"""
+      Output="""${manual.output.example}"""
+
+      Task:
+      Input="""${JSON.stringify(input)}"""
+      Output=
     `,
-    parser: (output) => JSON.parse(output),
+    parser: (output) => JSON.parse(output.replace(/^"""/, '').replace(/"""$/, '')),
     ...options,
   });
 }
