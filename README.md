@@ -1,6 +1,6 @@
 # Autobots AI
 
-A collection of JavaScript libraries to build automated assistants to accomplish vague objectives using LLMs. Comparable to [LangChain](https://python.langchain.com/docs/get_started/introduction.html) but with no ecosystem, an explicit focus on autonomous agents, and a Transformers™-inspired naming spin (not actually affiliated with Hasbro, Toei Animation, or Transformers in any way).
+A collection of JavaScript libraries to build automated assistants to accomplish vague objectives using LLMs. Comparable to [LangChain](https://python.langchain.com/docs/get_started/introduction.html) but with no ecosystem, strong typing, an explicit focus on autonomous agents, and a Transformers™-inspired naming spin (not actually affiliated with Hasbro, Toei Animation, or Transformers in any way).
 
 ## WTF did you build this?
 
